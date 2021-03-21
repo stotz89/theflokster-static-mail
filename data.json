@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "origin": "https://theflokster.com"
+    },
+    "body": "{\"name\": \"Max Mustermann\",\"email\": \"max@muster.de\",\"phone\": \"123456\",\"text\": \"Das ist ein Test und hier steht die Nachricht\"}"
+}

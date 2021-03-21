@@ -1,0 +1,47 @@
+service: theflokster-static-mail
+
+frameworkVersion: '2'
+configValidationMode: error
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+          Resource: ["*"]
+        - Effect: "Allow"
+          Action:
+            - "s3:ListBucket"
+            - "s3:GetObject"
+          Resource: ["*"]
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    AWS_S3BUCKET_NAME: ${env:AWS_S3BUCKET_NAME}
+
+functions:
+  thefloksterMailer:
+    handler: handler.thefloksterMailer
+    events:
+      - http:
+          method: post
+          path: thefloksterMailer
+          cors: true
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.theflokster.com
+    basePath: 'mail'
+    certificateName: '*.theflokster.com'
+    createRoute53Record: true
+    certificateArn: ${env:AWS_CERTIFICATE_ARN}
